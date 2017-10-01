@@ -15,6 +15,11 @@ function SonoffTasmotaHTTPH801Accessory(log, config) {
   this.config = config;
   this.name = config["name"]
   this.hostname = config["hostname"] || "sonoff";
+  this.hsv = {
+    h: 0,
+    s: 0,
+    v: 0
+  };
 
   var informationService = new Service.AccessoryInformation();
   informationService
@@ -22,7 +27,6 @@ function SonoffTasmotaHTTPH801Accessory(log, config) {
     .setCharacteristic(Characteristic.Model, 'homebridge-sonoff-tasmota-http-h801')
     .setCharacteristic(Characteristic.SerialNumber, 'HTTP Serial Number')
 
-  var bulb = this
   this.service = new Service.Lightbulb(this.name);
   this.service
     .getCharacteristic(Characteristic.On)
@@ -35,27 +39,27 @@ function SonoffTasmotaHTTPH801Accessory(log, config) {
   this.service     
     .addCharacteristic(new Characteristic.Hue())
     .on( 'get', function( callback ) {
-      bulb.getColor((err, hsv) => {
+      this.getColor((err, hsv) => {
         callback( err, hsv.h );
       });
     } )
     .on( 'set', function( value, callback ) {
-      bulb.log('Set Characteristic.Hue to ' + value);
-      bulb.hsv.h = value;
-      bulb.setColor(bulb.hsv);
+      this.log('Set Characteristic.Hue to ' + value);
+      this.hsv.h = value;
+      this.setColor(this.hsv);
       callback();
     } );
   this.service     
     .addCharacteristic(new Characteristic.Saturation())
     .on( 'get', function( callback ) {
-      bulb.getColor((err, hsv) => {
+      this.getColor((err, hsv) => {
         callback( err, hsv.s );
       });
     } )
     .on( 'set', function( value, callback ) {
-      bulb.log('Set Characteristic.Saturation to ' + value);
-      bulb.hsv.s = value;
-      bulb.setColor(bulb.hsv);
+      this.log('Set Characteristic.Saturation to ' + value);
+      this.hsv.s = value;
+      this.setColor(this.hsv);
       callback();
     } );
 
