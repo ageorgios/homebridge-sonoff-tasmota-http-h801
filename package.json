@@ -1,0 +1,31 @@
+{
+  "name": "homebridge-sonoff-tasmota-http-h801",
+  "version": "1.0.0",
+  "description": "Control H801 with Tasmota firmware through Homebridge",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "homebridge-plugin"
+  ],
+  "author": "Georgios Andritsos <ageorgios@gmail.com>",
+  "license": "MIT",
+  "engines": {
+    "node": ">=0.12.0",
+    "homebridge": ">=0.2.0"
+  },
+  "dependencies": {
+    "colorsys": "^1.0.10",
+    "request": "^2.81.0"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ageorgios/homebridge-sonoff-tasmota-http-h801.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ageorgios/homebridge-sonoff-tasmota-http-h801.git/issues"
+  },
+  "homepage": "https://github.com/ageorgios/homebridge-sonoff-tasmota-http-h801.git#readme"
+}
