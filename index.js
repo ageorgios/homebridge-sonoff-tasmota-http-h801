@@ -56,11 +56,10 @@ SonoffTasmotaHTTPH801Accessory.prototype.getServices = function() {
   this.service
     .getCharacteristic(Characteristic.On)
     .on( 'get', function( callback ) {
-        var that = this
-        request("http://" + this.hostname + "/cm?cmnd=Power", function(error, response, body) {
+        request("http://" + bulb.hostname + "/cm?cmnd=Power", function(error, response, body) {
           if (error) return callback(error);
         	var lines = body.split("\n");
-        	that.log("Sonoff LED: " + that.hostname + " Get State: " + lines[1]);
+        	bulb.log("Sonoff H801: " + bulb.hostname + " Get State: " + lines[1]);
         	if (lines[1] == "POWER = OFF") callback(null, 0)
         	else if (lines[1] == "POWER = ON") callback(null, 1)
         })
@@ -68,11 +67,10 @@ SonoffTasmotaHTTPH801Accessory.prototype.getServices = function() {
     .on( 'set', function( value, callback ) {
         var newstate = "%20Off"
         if (value) newstate = "%20On"
-        var that = this
-        request("http://" + this.hostname + "/cm?cmnd=Power" + newstate, function(error, response, body) {
+        request("http://" + bulb.hostname + "/cm?cmnd=Power" + newstate, function(error, response, body) {
           if (error) return callback(error);
         	var lines = body.split("\n");
-        	that.log("Sonoff LED: " + that.hostname + " Set State to: " + lines[1]);
+        	bulb.log("Sonoff H801: " + bulb.hostname + " Set State to: " + lines[1]);
         	if (lines[1] == "POWER = OFF") callback()
         	else if (lines[1] == "POWER = ON") callback()
         })
