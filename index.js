@@ -27,6 +27,7 @@ SonoffTasmotaHTTPH801Accessory.prototype.setColor = function(hsv) {
   color = color.substring(1, color.length);
   var that = this
   request("http://" + this.hostname + "/cm?cmnd=Color " + color, function(error, response, body) {
+    if (error) return hsv(error);
     var lines = body.split("=");
     var jsonreply = JSON.parse(lines[1])
     that.log("Sonoff H801: " + that.hostname + " Set Color: " + jsonreply.Color);
@@ -36,6 +37,7 @@ SonoffTasmotaHTTPH801Accessory.prototype.setColor = function(hsv) {
 SonoffTasmotaHTTPH801Accessory.prototype.getColor = function(callback) {
   var that = this
   request("http://" + this.hostname + "/cm?cmnd=Color", function(error, response, body) {
+        if (error) return callback(error);
     var lines = body.split("=");
     var jsonreply = JSON.parse(lines[1])
     var hsvcolor = colorsys.hex_to_hsv('#'+jsonreply.Color);
@@ -79,6 +81,7 @@ SonoffTasmotaHTTPH801Accessory.prototype.getServices = function() {
     .addCharacteristic(new Characteristic.Brightness())
     .on( 'get', function( callback ) {
       bulb.getColor((err, hsv) => {
+        if (err) return callback(err)
         callback( err, hsv.v );
       });
     } )
@@ -92,6 +95,7 @@ SonoffTasmotaHTTPH801Accessory.prototype.getServices = function() {
     .addCharacteristic(new Characteristic.Hue())
     .on( 'get', function( callback ) {
       bulb.getColor((err, hsv) => {
+        if (err) return callback(err)
         callback( err, hsv.h );
       });
     } )
@@ -105,6 +109,7 @@ SonoffTasmotaHTTPH801Accessory.prototype.getServices = function() {
     .addCharacteristic(new Characteristic.Saturation())
     .on( 'get', function( callback ) {
       bulb.getColor((err, hsv) => {
+        if (err) return callback(err)
         callback( err, hsv.s );
       });
     } )
