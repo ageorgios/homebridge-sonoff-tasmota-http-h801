@@ -60,10 +60,14 @@ SonoffTasmotaHTTPH801Accessory.prototype.getServices = function() {
     .on( 'get', function( callback ) {
         request("http://" + bulb.hostname + "/cm?cmnd=Power", function(error, response, body) {
           if (error) return callback(error);
-        	var lines = body.split("\n");
-        	bulb.log("Sonoff H801: " + bulb.hostname + " Get State: " + lines[1]);
-        	if (lines[1] == "POWER = OFF") callback(null, 0)
-        	else if (lines[1] == "POWER = ON") callback(null, 1)
+          var sonoff_reply = JSON.parse(body); // {"POWER":"ON"}
+          bulb.log("Sonoff H801: " + bulb.hostname + ", Get State: " + JSON.stringify(sonoff_reply));
+          switch (sonoff_reply["POWER" + bulb.relay]) {
+            case "ON":
+              callback(null, 1); break;
+            case "OFF":
+              callback(null, 0); break;
+          }
         })
     } )
     .on( 'set', function( value, callback ) {
@@ -71,10 +75,14 @@ SonoffTasmotaHTTPH801Accessory.prototype.getServices = function() {
         if (value) newstate = "%20On"
         request("http://" + bulb.hostname + "/cm?cmnd=Power" + newstate, function(error, response, body) {
           if (error) return callback(error);
-        	var lines = body.split("\n");
-        	bulb.log("Sonoff H801: " + bulb.hostname + " Set State to: " + lines[1]);
-        	if (lines[1] == "POWER = OFF") callback()
-        	else if (lines[1] == "POWER = ON") callback()
+          var sonoff_reply = JSON.parse(body); // {"POWER":"ON"}
+          bulb.log("Sonoff HTTP: " + bulb.hostname + ", Set State: " + JSON.stringify(sonoff_reply));
+          switch (sonoff_reply["POWER" + bulb.relay]) {
+            case "ON":
+              callback(); break;
+            case "OFF":
+              callback(); break;
+          }
         })
     } );
   this.service     
