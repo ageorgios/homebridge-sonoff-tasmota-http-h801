@@ -22,7 +22,7 @@ function SonoffTasmotaHTTPH801Accessory(log, config) {
   };
 }
 
-SonoffTasmotaHTTPH801Accessory.prototype.setColor = function(hsv, callback) {
+SonoffTasmotaHTTPH801Accessory.prototype.setColor = function(hsv) {
   var color = colorsys.hsv_to_hex( hsv );
   color = color.substring(1, color.length);
   var that = this
@@ -30,14 +30,13 @@ SonoffTasmotaHTTPH801Accessory.prototype.setColor = function(hsv, callback) {
     if (error) return callback(error);
     var sonoff_reply = JSON.parse(body); // {"Color":"FF9245"}
     that.log("Sonoff H801: " + that.hostname + " Set Color: " + sonoff_reply.Color);
-    callback()
   })
 };
 
 SonoffTasmotaHTTPH801Accessory.prototype.getColor = function(callback) {
   var that = this
   request("http://" + this.hostname + "/cm?cmnd=Color", function(error, response, body) {
-        if (error) return callback(error);
+    if (error) return callback(error);
     var sonoff_reply = JSON.parse(body); // {"Color":"FF9245"}
     var hsvcolor = colorsys.hex_to_hsv('#'+sonoff_reply.Color);
     that.log("Sonoff H801: " + that.hostname + " Get Color: " + sonoff_reply.Color + '. Parsed color is {h: ' + hsvcolor.h + ', s: ' + hsvcolor.s + ', v: ' + hsvcolor.v + '}');
@@ -61,7 +60,7 @@ SonoffTasmotaHTTPH801Accessory.prototype.getServices = function() {
           if (error) return callback(error);
           var sonoff_reply = JSON.parse(body); // {"POWER":"ON"}
           bulb.log("Sonoff H801: " + bulb.hostname + ", Get State: " + JSON.stringify(sonoff_reply));
-          switch (sonoff_reply["POWER" + bulb.relay]) {
+          switch (sonoff_reply["POWER"]) {
             case "ON":
               callback(null, 1); break;
             case "OFF":
@@ -76,7 +75,7 @@ SonoffTasmotaHTTPH801Accessory.prototype.getServices = function() {
           if (error) return callback(error);
           var sonoff_reply = JSON.parse(body); // {"POWER":"ON"}
           bulb.log("Sonoff HTTP: " + bulb.hostname + ", Set State: " + JSON.stringify(sonoff_reply));
-          switch (sonoff_reply["POWER" + bulb.relay]) {
+          switch (sonoff_reply["POWER"]) {
             case "ON":
               callback(); break;
             case "OFF":
