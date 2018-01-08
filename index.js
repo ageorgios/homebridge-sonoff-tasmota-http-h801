@@ -27,7 +27,7 @@ SonoffTasmotaHTTPH801Accessory.prototype.setColor = function(hsv, callback) {
   color = color.substring(1, color.length);
   var that = this
   request("http://" + this.hostname + "/cm?cmnd=Color " + color, function(error, response, body) {
-    if (error) return hsv(error);
+    if (error) return callback(error);
     var sonoff_reply = JSON.parse(body); // {"Color":"FF9245"}
     that.log("Sonoff H801: " + that.hostname + " Set Color: " + sonoff_reply.Color);
     callback()
