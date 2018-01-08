@@ -28,9 +28,8 @@ SonoffTasmotaHTTPH801Accessory.prototype.setColor = function(hsv) {
   var that = this
   request("http://" + this.hostname + "/cm?cmnd=Color " + color, function(error, response, body) {
     if (error) return hsv(error);
-    var lines = body.split("=");
-    var jsonreply = JSON.parse(lines[1])
-    that.log("Sonoff H801: " + that.hostname + " Set Color: " + jsonreply.Color);
+    var sonoff_reply = JSON.parse(body); // {"Color":"FF9245"}
+    that.log("Sonoff H801: " + that.hostname + " Set Color: " + sonoff_reply.Color);
   })
 };
 
@@ -38,10 +37,9 @@ SonoffTasmotaHTTPH801Accessory.prototype.getColor = function(callback) {
   var that = this
   request("http://" + this.hostname + "/cm?cmnd=Color", function(error, response, body) {
         if (error) return callback(error);
-    var lines = body.split("=");
-    var jsonreply = JSON.parse(lines[1])
-    var hsvcolor = colorsys.hex_to_hsv('#'+jsonreply.Color);
-    that.log("Sonoff H801: " + that.hostname + " Get Color: " + jsonreply.Color + '. Parsed color is {h: ' + hsvcolor.h + ', s: ' + hsvcolor.s + ', v: ' + hsvcolor.v + '}');
+    var sonoff_reply = JSON.parse(body); // {"Color":"FF9245"}
+    var hsvcolor = colorsys.hex_to_hsv('#'+sonoff_reply.Color);
+    that.log("Sonoff H801: " + that.hostname + " Get Color: " + sonoff_reply.Color + '. Parsed color is {h: ' + hsvcolor.h + ', s: ' + hsvcolor.s + ', v: ' + hsvcolor.v + '}');
     callback(error, hsvcolor)
   })
 };

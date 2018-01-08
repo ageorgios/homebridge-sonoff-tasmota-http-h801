@@ -1,6 +1,6 @@
 {
   "name": "homebridge-sonoff-tasmota-http-h801",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Control H801 RGB with Tasmota firmware through Homebridge",
   "main": "index.js",
   "scripts": {
