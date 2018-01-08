@@ -22,7 +22,7 @@ function SonoffTasmotaHTTPH801Accessory(log, config) {
   };
 }
 
-SonoffTasmotaHTTPH801Accessory.prototype.setColor = function(hsv) {
+SonoffTasmotaHTTPH801Accessory.prototype.setColor = function(hsv, callback) {
   var color = colorsys.hsv_to_hex( hsv );
   color = color.substring(1, color.length);
   var that = this
@@ -30,6 +30,7 @@ SonoffTasmotaHTTPH801Accessory.prototype.setColor = function(hsv) {
     if (error) return hsv(error);
     var sonoff_reply = JSON.parse(body); // {"Color":"FF9245"}
     that.log("Sonoff H801: " + that.hostname + " Set Color: " + sonoff_reply.Color);
+    callback()
   })
 };
 
